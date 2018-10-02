@@ -70,7 +70,7 @@ WriteOnceHash - be a Hash in which each key can only be set once
     }
 
     # mix in role on anything that does Associative
-    my %owoh{Any} is WriteOnce;
+    my %owoh{Any} does WriteOnce;
 
 =head1 DESCRIPTION
 
