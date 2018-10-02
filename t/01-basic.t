@@ -3,7 +3,7 @@ use Test;
 
 use WriteOnceHash;
 
-plan 20;
+plan 26;
 
 # normal hash
 my %woh is WriteOnceHash = a => 42;
@@ -34,6 +34,11 @@ is %woh<b>,        48, 'did the assignment work';
     %woh<b> = 1;
     ok $caught, 'did we get an exception';
     is %woh<b>, 48, 'did the assignment fail';
+
+    $caught = False;
+    %woh<b>:delete;
+    ok $caught, 'did we get an exception';
+    is %woh<b>, 48, 'did the removal fail';
 }
 
 # object hash with mixed in role
@@ -65,6 +70,11 @@ is %owoh{48},         "b", 'did the assignment work';
     %owoh{48} = "c";
     ok $caught, 'did we get an exception';
     is %owoh{48}, "b", 'did the assignment fail';
+
+    $caught = False;
+    %owoh{48}:delete;
+    ok $caught, 'did we get an exception';
+    is %owoh{48}, "b", 'did the removal fail';
 }
 
 # vim: ft=perl6 expandtab sw=4

@@ -1,10 +1,14 @@
 use v6.c;
 
+my constant DELETE = Mu.new;
+
 class X::Hash::WriteOnce is Exception {
     has $.key;
-    has $.value;
+    has Mu $.value;
     method message() {
-        "Not allowed to set '{$!key}' to '$!value' because it was already set"
+        $!value =:= DELETE
+          ?? "Can not delete '$!key'"
+          !! "Can not set '$!key' to '$!value' because it was already set"
     }
 }
 
@@ -30,12 +34,15 @@ role WriteOnce {
     method ASSIGN-KEY(::?CLASS:D: $key is raw, $value is raw) is raw {
          self!STORE-AT-KEY($key,$value)
     }
+    method DELETE-KEY(::?CLASS:D: $key is raw) {
+         X::Hash::WriteOnce.new( :$key, :value(DELETE) ).throw
+    }
     method STORE(::?CLASS:D: \iterable) {
         $STORE(self,iterable.map: { $_<> })
     }
 }
 
-class WriteOnceHash:ver<0.0.1>:auth<cpan:ELIZABETH>
+class WriteOnceHash:ver<0.0.2>:auth<cpan:ELIZABETH>
   is Hash
   does WriteOnce
 { }

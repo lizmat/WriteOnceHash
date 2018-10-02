@@ -2,5 +2,8 @@ Revision history for WriteOnceHash
 
 {{$NEXT}}
 
+0.0.2  2018-10-02T14:44:07+02:00
+    - Also disallow removal of keys
+
 0.0.1  2018-10-02T14:24:24+02:00
     - Initial version
