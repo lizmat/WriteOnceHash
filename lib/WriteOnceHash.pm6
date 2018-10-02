@@ -14,25 +14,14 @@ class X::Hash::WriteOnce is Exception {
 
 role WriteOnce {
 
-    # Need access to the original AT-KEY to prevent MMD collisions
-    my $AT-KEY = ::?CLASS.^find_method('AT-KEY');
+    # Need access to the original methods to prevent MMD collisions
     my $STORE  = ::?CLASS.^find_method('STORE');
 
-    method !STORE-AT-KEY($key is raw, $value is raw) is raw {
+    # interface method we need to override
+    method ASSIGN-KEY(::?CLASS:D: $key is raw, $value is raw) is raw {
         self.EXISTS-KEY($key)
           ?? X::Hash::WriteOnce.new( :$key, :$value ).throw
           !! self.BIND-KEY($key, $value<>)
-    }
-
-    # interface method we need to override
-    method AT-KEY(::?CLASS:D: $key is raw) is raw {
-        Proxy.new(
-          FETCH => -> $                { $AT-KEY(self,$key) },
-          STORE => -> $, $value is raw { self!STORE-AT-KEY($key,$value) }
-        )
-    }
-    method ASSIGN-KEY(::?CLASS:D: $key is raw, $value is raw) is raw {
-         self!STORE-AT-KEY($key,$value)
     }
     method DELETE-KEY(::?CLASS:D: $key is raw) {
          X::Hash::WriteOnce.new( :$key, :value(DELETE) ).throw
@@ -42,7 +31,7 @@ role WriteOnce {
     }
 }
 
-class WriteOnceHash:ver<0.0.2>:auth<cpan:ELIZABETH>
+class WriteOnceHash:ver<0.0.3>:auth<cpan:ELIZABETH>
   is Hash
   does WriteOnce
 { }

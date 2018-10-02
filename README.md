@@ -23,7 +23,7 @@ SYNOPSIS
     }
 
     # mix in role on anything that does Associative
-    my %owoh{Any} is WriteOnce;
+    my %owoh{Any} does WriteOnce;
 
 DESCRIPTION
 ===========
