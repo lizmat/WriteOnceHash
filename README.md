@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/lizmat/WriteOnceHash.svg?branch=master)](https://travis-ci.org/lizmat/WriteOnceHash)
-
 NAME
 ====
 
@@ -44,7 +42,7 @@ Source can be located at: https://github.com/lizmat/WriteOnceHash . Comments and
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2018 Elizabeth Mattijsen
+Copyright 2018,2020 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

@@ -77,4 +77,4 @@ is %owoh{48},         "b", 'did the assignment work';
     is %owoh{48}, "b", 'did the removal fail';
 }
 
-# vim: ft=perl6 expandtab sw=4
+# vim: expandtab shiftwidth=4

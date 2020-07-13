@@ -31,7 +31,7 @@ role WriteOnce {
     }
 }
 
-class WriteOnceHash:ver<0.0.3>:auth<cpan:ELIZABETH>
+class WriteOnceHash:ver<0.0.4>:auth<cpan:ELIZABETH>
   is Hash
   does WriteOnce
 { }
@@ -85,10 +85,11 @@ Comments and Pull Requests are welcome.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2018 Elizabeth Mattijsen
+Copyright 2018,2020 Elizabeth Mattijsen
 
-This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
+This library is free software; you can redistribute it and/or modify
+it under the Artistic License 2.0.
 
 =end pod
 
-# vim: ft=perl6 expandtab sw=4
+# vim: expandtab shiftwidth=4

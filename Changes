@@ -2,6 +2,9 @@ Revision history for WriteOnceHash
 
 {{$NEXT}}
 
+0.0.4  2020-07-13T16:22:16+02:00
+    - Minor documentation / comment tweaks.
+
 0.0.3  2018-10-02T14:59:07+02:00
     - Simplify: since we're already storing values de-containerized, and
       we also override ASSIGN-KEY, we don't actually need to override
@@ -11,7 +14,7 @@ Revision history for WriteOnceHash
       performance penalty from just accessing keys in the hash.
 
 0.0.2  2018-10-02T14:44:07+02:00
-    - Also disallow removal of keys
+    - Also disallow removal of keys.
 
 0.0.1  2018-10-02T14:24:24+02:00
-    - Initial version
+    - Initial version.
