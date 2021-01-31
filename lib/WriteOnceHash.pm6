@@ -1,4 +1,4 @@
-use v6.c;
+use v6.d;
 
 my constant DELETE = Mu.new;
 
@@ -8,16 +8,67 @@ class X::Hash::WriteOnce is Exception {
     method message() {
         $!value =:= DELETE
           ?? "Can not delete '$!key'"
-          !! "Can not set '$!key' to '$!value' because it was already set"
+          !! $!key.defined
+            ?? "Can not set '$!key' to '$!value' because it was already set"
+            !! "Can not re-initialize a WriteOnceHash"
     }
 }
 
 role WriteOnce {
 
     # Need access to the original methods to prevent MMD collisions
-    my $STORE  = ::?CLASS.^find_method('STORE');
+    my &AT-KEY := ::?CLASS.^find_method('AT-KEY');
 
-    # interface method we need to override
+    method !STORE-FROM-ITERABLE(\iterable --> Int:D) {
+        my $iterator := iterable.iterator;
+        my $added = 0;
+        my $pulled;
+        my $value;
+
+        until ($pulled := $iterator.pull-one) =:= IterationEnd {
+
+            # process a pair
+            if $pulled ~~ Pair {
+                self.BIND-KEY($pulled.key, $pulled.value<>);
+                ++$added;
+            }
+
+            # a Map and not a container, sub-process the Map
+            elsif $pulled ~~ Map && $pulled.VAR.^name eq $pulled.^name {
+                $added += self!STORE-FROM-ITERABLE($pulled)
+            }
+
+            # just a key, get the value and process
+            elsif ($value := $iterator.pull-one) =:= IterationEnd {
+                $pulled ~~ Failure
+                  ?? $pulled.throw
+                  !! X::Hash::Store::OddNumber.new(
+                       found => $added * 2 + 1,
+                       last  => $pulled
+                     ).throw;
+
+                self.BIND-KEY($pulled, $value<>);
+                ++$added;
+            }
+        }
+
+        $added
+    }
+
+    # interface methods we need to override
+    method AT-KEY(::?CLASS:D: $key is raw) is raw {
+        self.EXISTS-KEY($key)
+          ?? AT-KEY(self, $key)
+          !! Proxy.new(
+               FETCH => -> $ { AT-KEY(self, $key) },
+               STORE => -> $, $value is raw {
+                 self.EXISTS-KEY($key)
+                   ?? X::Hash::WriteOnce.new( :$key, :$value ).throw
+                   !! self.BIND-KEY($key, $value<>)
+               }
+             )
+    }
+
     method ASSIGN-KEY(::?CLASS:D: $key is raw, $value is raw) is raw {
         self.EXISTS-KEY($key)
           ?? X::Hash::WriteOnce.new( :$key, :$value ).throw
@@ -26,12 +77,14 @@ role WriteOnce {
     method DELETE-KEY(::?CLASS:D: $key is raw) {
          X::Hash::WriteOnce.new( :$key, :value(DELETE) ).throw
     }
-    method STORE(::?CLASS:D: \iterable) {
-        $STORE(self,iterable.map: { $_<> })
+    method STORE(::?CLASS:D: \iterable, :$INITIALIZE) {
+        $INITIALIZE
+          ?? self!STORE-FROM-ITERABLE(iterable)
+          !! X::Hash::WriteOnce.new.throw
     }
 }
 
-class WriteOnceHash:ver<0.0.4>:auth<cpan:ELIZABETH>
+class WriteOnceHash:ver<0.0.5>:auth<cpan:ELIZABETH>
   is Hash
   does WriteOnce
 { }
@@ -66,8 +119,12 @@ WriteOnceHash - be a Hash in which each key can only be set once
 This module makes an C<WriteOnceHash> class available that can be used
 instead of the normal C<Hash>.  The only difference with a normal
 C<Hash> is, is that if an attempt is made to set the value of a key that
-B<has already been set before>, that then an exception is thrown rather
-than just overwriting the key in the C<Hash>.
+B<has already been set before>, an exception is thrown rather than just
+overwriting the key in the C<Hash>.
+
+Also binding to non-existing keys in the hash, and then assigning to the
+obtained container, will only work once.  Iterating over values of the
+hash will only yield values, not containers (as a normal C<Hash> would).
 
 Also exports a C<X::Hash::WriteOnce> error class that will be thrown
 if an attempt is made to set a key again.
@@ -85,7 +142,7 @@ Comments and Pull Requests are welcome.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2018,2020 Elizabeth Mattijsen
+Copyright 2018,2020,2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify
 it under the Artistic License 2.0.

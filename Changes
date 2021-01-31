@@ -2,6 +2,10 @@ Revision history for WriteOnceHash
 
 {{$NEXT}}
 
+0.0.5  2021-01-31T19:23:37+01:00
+    - Closed some loopholes that allowed changing of values in hash
+    - Updated copyright year
+
 0.0.4  2020-07-13T16:22:16+02:00
     - Minor documentation / comment tweaks.
 

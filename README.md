@@ -26,7 +26,9 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-This module makes an `WriteOnceHash` class available that can be used instead of the normal `Hash`. The only difference with a normal `Hash` is, is that if an attempt is made to set the value of a key that **has already been set before**, that then an exception is thrown rather than just overwriting the key in the `Hash`.
+This module makes an `WriteOnceHash` class available that can be used instead of the normal `Hash`. The only difference with a normal `Hash` is, is that if an attempt is made to set the value of a key that **has already been set before**, an exception is thrown rather than just overwriting the key in the `Hash`.
+
+Also binding to non-existing keys in the hash, and then assigning to the obtained container, will only work once. Iterating over values of the hash will only yield values, not containers (as a normal `Hash` would).
 
 Also exports a `X::Hash::WriteOnce` error class that will be thrown if an attempt is made to set a key again.
 
@@ -42,7 +44,7 @@ Source can be located at: https://github.com/lizmat/WriteOnceHash . Comments and
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2018,2020 Elizabeth Mattijsen
+Copyright 2018,2020,2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 
