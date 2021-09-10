@@ -84,7 +84,7 @@ role WriteOnce {
     }
 }
 
-class WriteOnceHash:ver<0.0.5>:auth<cpan:ELIZABETH>
+class WriteOnceHash:ver<0.0.6>:auth<zef:lizmat>
   is Hash
   does WriteOnce
 { }
@@ -135,14 +135,14 @@ as object hashes).
 
 =head1 AUTHOR
 
-Elizabeth Mattijsen <liz@wenzperl.nl>
+Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/WriteOnceHash .
 Comments and Pull Requests are welcome.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2018,2020,2021 Elizabeth Mattijsen
+Copyright 2018, 2020, 2021 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify
 it under the Artistic License 2.0.
