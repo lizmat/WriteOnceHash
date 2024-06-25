@@ -8,22 +8,24 @@ WriteOnceHash - be a Hash in which each key can only be set once
 SYNOPSIS
 ========
 
-    use WriteOnceHash;
+```raku
+use WriteOnceHash;
 
-    # bind to predefined class
-    my %woh is WriteOnceHash;
-    %woh<a> = 5; # ok
-    %woh<a> = 1; # throws
-      
-    CATCH {
-        when X::Hash::WriteOnce {
-            say "Sorry, already set {.key} before";
-            .resume
-        }
+# bind to predefined class
+my %woh is WriteOnceHash;
+%woh<a> = 5; # ok
+%woh<a> = 1; # throws
+
+CATCH {
+    when X::Hash::WriteOnce {
+        say "Sorry, already set {.key} before";
+        .resume
     }
+}
 
-    # mix in role on anything that does Associative
-    my %owoh{Any} does WriteOnce;
+# mix in role on anything that does Associative
+my %owoh{Any} does WriteOnce;
+```
 
 DESCRIPTION
 ===========
@@ -43,10 +45,12 @@ Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/WriteOnceHash . Comments and Pull Requests are welcome.
 
+If you like this module, or what I’m doing more generally, committing to a [small sponsorship](https://github.com/sponsors/lizmat/) would mean a great deal to me!
+
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2018, 2020, 2021 Elizabeth Mattijsen
+Copyright 2018, 2020, 2021, 2024 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

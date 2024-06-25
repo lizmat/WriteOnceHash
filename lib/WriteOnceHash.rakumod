@@ -84,10 +84,7 @@ role WriteOnce {
     }
 }
 
-class WriteOnceHash:ver<0.0.6>:auth<zef:lizmat>
-  is Hash
-  does WriteOnce
-{ }
+class WriteOnceHash is Hash does WriteOnce { }
 
 =begin pod
 
@@ -97,22 +94,26 @@ WriteOnceHash - be a Hash in which each key can only be set once
 
 =head1 SYNOPSIS
 
-    use WriteOnceHash;
+=begin code :lang<raku>
 
-    # bind to predefined class
-    my %woh is WriteOnceHash;
-    %woh<a> = 5; # ok
-    %woh<a> = 1; # throws
-  
-    CATCH {
-        when X::Hash::WriteOnce {
-            say "Sorry, already set {.key} before";
-            .resume
-        }
+use WriteOnceHash;
+
+# bind to predefined class
+my %woh is WriteOnceHash;
+%woh<a> = 5; # ok
+%woh<a> = 1; # throws
+
+CATCH {
+    when X::Hash::WriteOnce {
+        say "Sorry, already set {.key} before";
+        .resume
     }
+}
 
-    # mix in role on anything that does Associative
-    my %owoh{Any} does WriteOnce;
+# mix in role on anything that does Associative
+my %owoh{Any} does WriteOnce;
+
+=end code
 
 =head1 DESCRIPTION
 
@@ -140,9 +141,13 @@ Elizabeth Mattijsen <liz@raku.rocks>
 Source can be located at: https://github.com/lizmat/WriteOnceHash .
 Comments and Pull Requests are welcome.
 
+If you like this module, or what I’m doing more generally, committing to a
+L<small sponsorship|https://github.com/sponsors/lizmat/>  would mean a great
+deal to me!
+
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2018, 2020, 2021 Elizabeth Mattijsen
+Copyright 2018, 2020, 2021, 2024 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify
 it under the Artistic License 2.0.
