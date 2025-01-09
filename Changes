@@ -1,6 +1,8 @@
 Revision history for WriteOnceHash
 
 {{$NEXT}}
+    - Add CI badge for each OS
+    - Update copyright year
 
 0.0.7  2024-06-25T14:25:52+02:00
     - Modernize test file extension
