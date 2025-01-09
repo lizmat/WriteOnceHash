@@ -1,6 +1,8 @@
 Revision history for WriteOnceHash
 
 {{$NEXT}}
+
+0.0.8  2025-01-09T12:23:10+01:00
     - Add CI badge for each OS
     - Update copyright year
 
