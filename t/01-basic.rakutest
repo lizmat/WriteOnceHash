@@ -1,8 +1,7 @@
-use v6.*;
 use Test;
 use WriteOnceHash;
 
-plan 34;
+plan 37;
 
 # normal hash
 my %woh is WriteOnceHash = a => 42;
@@ -13,15 +12,22 @@ is (%woh<b> = 48), 48, 'does assignment pass value through';
 is %woh<b>,        48, 'did the assignment work';
 
 my $c := %woh<c>;
+is $c.VAR.^name, 'Proxy', 'did we actually get a proxy';
 is (%woh<c> = 56), 56, 'does assignment pass value through Proxy';
 is %woh<c>,        56, 'did the assignment work';
+
+my %woh2 is WriteOnceHash = a => 42, { b => 666 };
+is %woh2<b>, 666, 'did map get flattened';
+
+my %woh3 is WriteOnceHash = "a", 42, "b", 666;
+is %woh3<b>, 666, 'was list of values handled ok';
 
 {
     my $caught = False;
     CATCH {
         $caught = True;
         when X::Hash::WriteOnce {
-            pass 'threw the correct exception';
+            isa-ok .message, Str, 'threw the correct exception';
             .resume;
         }
         default {

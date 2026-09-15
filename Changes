@@ -1,6 +1,10 @@
 Revision history for WriteOnceHash
 
 {{$NEXT}}
+    - Fixed issue with initializing from a list
+    - Add full coverage testing
+    - Modernize meta
+    - Update copyright year
 
 0.0.8  2025-01-09T12:23:10+01:00
     - Add CI badge for each OS

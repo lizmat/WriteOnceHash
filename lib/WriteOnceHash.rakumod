@@ -23,7 +23,7 @@ role WriteOnce {
         my $pulled;
         my $value;
 
-        until ($pulled := $iterator.pull-one) =:= IterationEnd {
+        until ($pulled := $iterator.pull-one) =:= IterationEnd {  # UNCOVERABLE
 
             # process a pair
             if $pulled ~~ Pair {
@@ -32,19 +32,22 @@ role WriteOnce {
             }
 
             # a Map and not a container, sub-process the Map
-            elsif $pulled ~~ Map && $pulled.VAR.^name eq $pulled.^name {
+            elsif $pulled ~~ Map && $pulled.VAR.^name eq $pulled.^name {  # UNCOVERABLE
                 $added += self!STORE-FROM-ITERABLE($pulled)
             }
 
             # just a key, get the value and process
-            elsif ($value := $iterator.pull-one) =:= IterationEnd {
+            elsif ($value := $iterator.pull-one) =:= IterationEnd {  # UNCOVERABLE
                 $pulled ~~ Failure
                   ?? $pulled.throw
                   !! X::Hash::Store::OddNumber.new(
                        found => $added * 2 + 1,
                        last  => $pulled
                      ).throw;
+            }
 
+            # Found a value, associate with key
+            else {
                 self.BIND-KEY($pulled, $value<>);
                 ++$added;
             }
@@ -58,9 +61,9 @@ role WriteOnce {
         self.EXISTS-KEY($key)
           ?? AT-KEY(self, $key)
           !! Proxy.new(
-               FETCH => -> $ { AT-KEY(self, $key) },
-               STORE => -> $, $value is raw {
-                 self.EXISTS-KEY($key)
+               FETCH => -> $ { AT-KEY(self, $key) },  # UNCOVERABLE
+               STORE => -> $, $value is raw {  # UNCOVERABLE
+                 self.EXISTS-KEY($key)  # UNCOVERABLE
                    ?? X::Hash::WriteOnce.new( :$key, :$value ).throw
                    !! self.BIND-KEY($key, $value<>)
                }
