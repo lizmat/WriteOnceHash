@@ -1,6 +1,8 @@
 Revision history for WriteOnceHash
 
 {{$NEXT}}
+
+0.0.9  2026-09-15T14:29:12+02:00
     - Fixed issue with initializing from a list
     - Add full coverage testing
     - Modernize meta
